@@ -59,7 +59,7 @@ def disconnect(alias=DEFAULT_CONNECTION_NAME):
         del _default_dbs[alias]
 
 
-def get_connection(alias=DEFAULT_CONNECTION_NAME, db=None, connection_class=MotorClient):
+def get_connection(alias=DEFAULT_CONNECTION_NAME, db=None, connection_class=None):
     global _connections
     global _default_dbs
 
@@ -70,7 +70,7 @@ def get_connection(alias=DEFAULT_CONNECTION_NAME, db=None, connection_class=Moto
         if 'replicaSet' in conn_settings:
             # Discard port since it can't be used on MongoReplicaSetClient
             conn_settings.pop('port', None)
-
+            connection_class= MotorClient if connection_class is None else connection_class 
             # Discard replicaSet if not base string
             if not isinstance(conn_settings['replicaSet'], six.string_types):
                 conn_settings.pop('replicaSet', None)
